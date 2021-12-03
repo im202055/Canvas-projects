@@ -1,0 +1,159 @@
+const canvas = document.getElementById('canvas1');
+const recorder = new CanvasRecorder(canvas);
+
+const ctx = canvas.getContext('2d');
+let yspeed=.01;
+let xspeed=.01;
+let y=0
+let r=Math.random()*20
+let ar =[]
+let ap=[]
+let api=[]
+let click =0
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+w=canvas.width
+h=canvas.height
+let hue=0
+
+window.addEventListener('resize',function(){
+  canvas.width=window.innerWidth;
+   canvas.height=window.innerHeight;
+ });
+
+const mouse = {
+  x:undefined,
+  y:undefined
+}
+canvas.addEventListener('click',function(event){
+if (click==0) { recorder.start();
+}
+if (click>0) { recorder.stop();
+  recorder.save('busy_motion.webm');
+
+}
+click+=1  //
+  yspeed=Math.random()+2;
+  xspeed=Math.random();
+  mouse.x=event.x;
+  mouse.y=event.y;
+  //ap.push(new Particle(mouse.x, mouse.y,(Math.random()*10),xspeed,yspeed ))
+    ar.push(new Thing(mouse.x,mouse.y,Math.random()*100))
+    for(j=0;j<ar.length;j++){
+  for(i=0;i<10;i++){
+    //ap.push(new Particle(mouse.x, mouse.y,(Math.random()*1),xspeed,yspeed ))
+
+      ap.push(new Particle(ar[j].x,ar[j].y,ar[j].rad,ar[j].xspeed,ar[j].yspeed))
+      // if (ap.length>=10){
+      //
+      //   ap.shift();
+      //}
+   }
+ }
+})
+
+canvas.addEventListener('mousemove',function(event){
+
+  //for(i=0;i<1;i++){
+    // ap.push(new Particle(mouse.x, mouse.y,(Math.random()*100),xspeed,yspeed ))
+    // if (ap.length>=10){
+    //
+    //   ap.shift();
+    // }
+ //     ap.push(new Particle(ar[j].x,ar[j].y,ar[j].rad,ar[j].xspeed,ar[j].yspeed))
+  // }
+  mouse.x=event.x;
+  mouse.y=event.y;
+})
+
+//setInterval(animate,1)
+animate();
+console.log(ctx)
+function animate(){
+  //ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='rgba(0,0,0,.03)'
+  ctx.fillRect(0,0,w,h);
+  //ap.push(new Particle(Math.random()*w,Math.random()*h,50,0,0))
+
+  //ar.push(new Thing(mouse.x,mouse.y,Math.random()*100))
+  //init()
+  handle()
+  //line()
+  if (ap.length>=100){
+
+    ap.pop();
+  }
+    requestAnimationFrame(animate);
+    hue++
+}
+function init(){
+  for(let i=0;i<ar.length;i++){
+    ap.push(new Particle(ar[i].x,ar[i].y,ar[i].rad,ar[i].xspeed,ar[i].yspeed))
+    if (ar.length>=4){
+      //ap.pop()
+      ar.shift()
+    }
+    if (ap.length>=100){
+
+      //ap.shift();
+    }
+}
+}
+// function line(){
+//   for(let i = 0;i<ap.length;i++){
+//     for(let j=i;j<ap.length;j++){
+//       const dx=ap[i].x-ap[j].x
+//       const dy=ap[i].y-ap[j].y
+//       const distance=Math.sqrt(dx*dx+dy*dy)
+//       if (distance<100&&distance>50){
+//         ctx.strokeStyle='rgba(255,0,0,0.2)';
+//         ctx.lineWidth=1;
+//
+//         ctx.beginPath();
+//         //ctx.strokeStyle=ap[i].col
+//
+//         ctx.moveTo(ap[i].x,ap[i].y)
+//         ctx.lineTo(ap[j].x,ap[j].y)
+//         ctx.stroke()
+//
+//
+//       }
+//     }
+// }
+// }
+function handle(){
+  for(let i = 0;i<ap.length;i++){
+
+    ap[i].draw()
+    ap[i].move()
+    // for(let j=i;j<ap.length;j++){
+    //   const dx=ap[i].x-ap[j].x
+    //   const dy=ap[i].y-ap[j].y
+    //   const distance=Math.sqrt(dx*dx+dy*dy)
+    //   if (distance<100){
+    //     ctx.beginPath();
+    //     ctx.strokeStyle=ap[i].col
+    //
+    //     ctx.moveTo(ap[i].x,ap[i].y)
+    //     ctx.lineTo(ap[j].x,ap[j].y)
+    //     ctx.stroke()
+    //
+    //
+    //   }
+    //}
+    // if (ap[i].size<=.3){
+    //   ap.splice(i,1)
+    //   i--
+    // }
+
+
+  }
+  for (let bub of ar){
+    bub.draw()
+    bub.move()
+  }
+
+}
+function map_range(value, low1, high1, low2, high2) {
+    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+}
