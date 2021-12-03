@@ -21,7 +21,7 @@ content = `<!DOCTYPE html>
 fs.writeFileSync("index.html", content);
 fs.readdirSync(testFolder).forEach(file => {
   content = `<br/>
-  <a href=${file}>${file}</a>`;
+  <a href="${file}">${file}</a>`;
   fs.appendFileSync("index.html", content);
 });
 
